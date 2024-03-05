@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario</title>
+    <link rel="shortcut icon" href="https://i.ibb.co/kh6hQ2x/favicon.jpg" alt="favicon" border="0" type="image/x-icon">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+
+
+</head>
+
+<body>
+    <img src="https://i.ibb.co/W2Wyh65/SUP-IZQ.png" alt="SUP-IZQ" border="0"class="sup-iz"> 
+    <header>
+        <img src="https://i.ibb.co/Tqh93bf/logo-ese.jpg" alt="logo-ese" border="0"class="logo">
+    </header>
+    <div id="form-container" class="container-eva">
+        <div id="header">
+            <h2>Cuestionario Inducción Ese San Sebastian</h2>
+        </div>
+
+        <form id="evaluacionForm">
+            <fieldset>
+                <legend>Area Administrativa</legend>
+
+                <!-- Pregunta 1 -->
+                <label>Pregunta 1: ¿Cuánto es 2 + 2?<br>
+                    <input type="radio" name="pregunta1" value="a"> 4
+                    <input type="radio" name="pregunta1" value="b"> 6
+                    <input type="radio" name="pregunta1" value="c"> 8
+                    <input type="radio" name="pregunta1" value="d"> 10
+                </label>
+
+                <!-- Pregunta 2 -->
+                <label>Pregunta 2: ¿Cuánto es 5 * 7?<br>
+                    <input type="radio" name="pregunta2" value="a"> 25
+                    <input type="radio" name="pregunta2" value="b"> 35
+                    <input type="radio" name="pregunta2" value="c"> 45
+                    <input type="radio" name="pregunta2" value="d"> 55
+                </label>
+
+                <!-- Pregunta 3 -->
+                <label>Pregunta 3: ¿Cuál es la raíz cuadrada de 81?<br>
+                    <input type="radio" name="pregunta3" value="a"> 9
+                    <input type="radio" name="pregunta3" value="b"> 8
+                    <input type="radio" name="pregunta3" value="c"> 7
+                    <input type="radio" name="pregunta3" value="d"> 6
+                </label>
+            </fieldset>
+            <fieldset>
+                <legend>Area Asistencial</legend>
+
+
+
+                <!-- ... (resto de las preguntas) ... -->
+
+            </fieldset>
+
+            <!-- Datos personales -->
+
+            <fieldset>
+                <legend>Datos Personales</legend>
+                <div class="datos-per">
+                    <label for="nombres">Nombres:</label>
+                    <input type="text" id="nombres" name="nombres" required placeholder="Ingresa tus Nombres">
+
+                    <label for="apellidos">Apellidos:</label>
+                    <input type="text" id="apellidos" name="apellidos" required placeholder="Ingresas tus Apellidos" >
+
+                    <label for="numeroDocumento">Número de Documento:</label>
+                    <input type="number" id="numeroDocumento" name="numeroDocumento" required placeholder="Ingresa tu Numero de documento">
+
+                    <label for="areaTrabajo">Cargo al que se presenta:</label>
+                    <input type="text" id="areaTrabajo" name="areaTrabajo" required placeholder="Cargo"><br>
+                </div>
+            </fieldset>
+            <button type="button" id="submitBtn" onclick="evaluarEvaluacion()">Enviar Respuestas</button>
+
+
+    </div>
+
+    </form>
+    </div>
+    <script>
+        async function evaluarEvaluacion() {
+            const form = document.getElementById('evaluacionForm');
+            const radios = form.querySelectorAll('input[type="radio"]:checked');
+            const totalPreguntas = radios.length;
+            let respuestasCorrectas = 0;
+
+            // Validar que los campos obligatorios estén llenos
+            const nombres = document.getElementById('nombres').value.trim();
+            const apellidos = document.getElementById('apellidos').value.trim();
+            const numeroDocumento = document.getElementById('numeroDocumento').value.trim();
+            const areaTrabajo = document.getElementById('areaTrabajo').value.trim();
+
+            if (!nombres || !apellidos || !numeroDocumento || !areaTrabajo) {
+                alert('Por favor, complete todos los campos obligatorios.');
+                return;
+            }
+
+            radios.forEach((radio) => {
+                const respuestaCorrecta = radio.value === "a";
+                if (respuestaCorrecta) {
+                    respuestasCorrectas++;
+                }
+            });
+
+            if (respuestasCorrectas > 2) {
+                // Redirigir a certificado.html con parámetros de consulta
+                window.location.href = `certificado.html?nombres=${nombres}&apellidos=${apellidos}&numeroDocumento=${numeroDocumento}&areaTrabajo=${areaTrabajo}`;
+            } else {
+                alert('Lo siento, no has alcanzado el mínimo de respuestas correctas. Debes volver a empezar.');
+                // Reiniciar el formulario
+                form.reset();
+            }
+        }
+
+    </script>
+    <footer>
+        <img src="https://i.ibb.co/CH1m1vs/INF-IZQ-11.png" alt="INF-IZQ-11" border="0"class="inf-izq2">
+        <img src="https://i.ibb.co/Z2WPB3X/INF-DER-12.png" alt="INF-DER-12" border="0"class="inf-der2">
+    </footer>
+</body>
+
+</html>

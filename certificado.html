@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificado de Aprobación</title>
+    <link rel="shortcut icon" href="https://i.ibb.co/kh6hQ2x/favicon.jpg" alt="favicon" border="0" type="image/x-icon">
+
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+
+    <style>
+        body {
+            font-family: "arial", sans-serif;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Ocultamos el botón de impresión al imprimir */
+        @media print {
+            .descargar {
+                display: none;
+            }
+        }
+    </style>
+
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+</head>
+
+<body>
+    <div id="temporizador"></div>
+    <div id="certificado">
+        <div class="container-cert">
+            <div class="titulos">
+                <h1>CERTIFICADO</h1>
+                <h2>DE APROBACIÓN</h2>
+            </div>
+            <p>La Empresa Social del Estado San Sebastián de La Plata Huila</p>
+            <p>Hace constar que:</p>
+            <div class="campo-nom">
+                <b id="nombreCompleto"></b>
+            </div>
+            <div class="campo-cc">
+                <p id="numeroDocumento"></p>
+            </div>
+            <p>Participó y completó con éxito el procedimiento de la ruta de inducción virtual para el cargo de:</p>
+            <div class="campo-area">
+                <p id="areaTrabajo"></p>
+            </div>
+            <p>La Plata Huila, <u><span id="fechaActual"></span></p></u><br><br>
+            <div id="qrContainer"></div>
+
+            <div class="contendor-mig">
+                <p>Miguel Antonio Tejada</p>
+                <p>Líder Gestión de Talento Humano</p>
+                <p><span id="numeroUnico"></span></p>
+            </div>
+        </div>
+        <div class="descargar"><button onclick="descargarCertificado()" class="descargar">Descargar PDF</button></div>
+
+    </div>
+    
+    <script>
+        // Obtener datos de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const nombres = urlParams.get('nombres');
+        const apellidos = urlParams.get('apellidos');
+        const numeroDocumento = urlParams.get('numeroDocumento');
+        const areaTrabajo = urlParams.get('areaTrabajo');
+
+        // Obtener la fecha actual en formato deseado
+        const fechaActual = new Date();
+        const formatoFecha = `${fechaActual.getDate().toString().padStart(2, '0')}/${(fechaActual.getMonth() + 1).toString().padStart(2, '0')}/${fechaActual.getFullYear()}`;
+
+        // Obtener el número único
+        const formatoNumeroUnico = `${fechaActual.getHours().toString().padStart(2, '0')}${fechaActual.getMinutes().toString().padStart(2, '0')}${fechaActual.getDate().toString().padStart(2, '0')}${(fechaActual.getMonth() + 1).toString().padStart(2, '0')}${fechaActual.getFullYear().toString()}`;
+
+        // Rellenar el certificado con los datos obtenidos
+        document.getElementById('nombreCompleto').innerText = `${nombres} ${apellidos}`;
+        document.getElementById('numeroDocumento').innerText = `CC: ${numeroDocumento}`;
+        document.getElementById('areaTrabajo').innerText = ` ${areaTrabajo}`;
+        document.getElementById('fechaActual').innerText = formatoFecha;
+        document.getElementById('numeroUnico').innerText = formatoNumeroUnico;
+
+        // Generar código QR con el nombre completo
+        const qrContainer = document.getElementById('qrContainer');
+        const qr = new QRCode(qrContainer, {
+            text: `${nombres} ${apellidos} \n${numeroDocumento}\n${formatoNumeroUnico}`,
+            width: 128,
+            height: 128,
+        });
+        // Temporizador para redirigir después de 1 minuto
+        let segundosRestantes = 60;
+        const temporizadorInterval = setInterval(() => {
+            document.getElementById('temporizador').innerText = `Tiempo restante para descargar certificado: ${segundosRestantes} segundos`;
+
+            if (segundosRestantes <= 0) {
+                clearInterval(temporizadorInterval);
+                window.location.href = 'index.html';
+                alert("lo siento. has agotado tu tiempo de espera para descargar el certificado.\n Estás siendo redireccionado a la página principal");
+            }
+            segundosRestantes--;
+        }, 1000);
+
+        let certificadoGenerado = false;
+        function descargarCertificado() {
+            clearInterval(temporizadorInterval); // Detener el temporizador al descargar el certificado
+
+            // Opciones de configuración para html2pdf.js
+            const options = {
+                margin: 10,
+                filename: `certificado_${numeroDocumento}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'letter', orientation: 'portrait' }
+            };
+
+            // Elemento HTML a convertir en PDF
+            const certificadoElement = document.getElementById('certificado');
+
+            // Usar html2pdf.js para generar el PDF
+            html2pdf(certificadoElement, options).then(() => {
+                      // Marcar que el certificado se ha generado
+            certificadoGenerado = true;
+                // Redirigir a index.html después de descargar el certificado
+                window.location.href = 'index.html';
+                alert("¡FELICIDADES¡\n Certificado descargado con éxito.\n Estás siendo redireccionado a la página principal");
+            });
+        }
+        // Antes de redirigir, verifica si el certificado ya se ha generado
+window.onbeforeunload = function (event) {
+    if (certificadoGenerado) {
+
+        const message = "Ya has generado el certificado. No puedes retroceder para cambiar los valores.";
+        event.returnValue = message;
+        return message;
+    }
+};
+    </script>
+</body>
+
+</html>
