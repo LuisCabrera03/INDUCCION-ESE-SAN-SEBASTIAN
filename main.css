@@ -287,8 +287,10 @@ button:active{
 #selectorOpciones{
     border-radius: 8px;
     padding: 8px;
+    font-size: clamp(10px,3vw, 20px);
 }
 .formulario-google{
+    margin-top: 30px;
     width: 80%;
     height: auto;
     margin: 0 auto;
@@ -373,6 +375,15 @@ iframe{
 }
 .active, .quadrate:hover{
     background-color: #fff;
+}
+.video h1{
+    font-size: clamp(10px, 3vw, 20px);
+    text-align: center;
+    background-color: #009640;
+    color: white;
+    border-radius: 10px;
+    width: 100%;
+    padding: 30px 0;
 }
 @media screen and (max-width:900px) {
     .container{
@@ -484,7 +495,7 @@ input[type="radio"] {
     padding: 20px;
     border: 2px solid #009640;
     border-radius: 10px;
-    background-image: url(https://i.ibb.co/G76rLMq/certificado.png);
+    background-image: url(img/certificado.png);
     background-size: cover;
     background-repeat: no-repeat;
     background-size: 100% 690px;
@@ -605,6 +616,9 @@ header{
 }
 .container-ingreso{
     height: 250px;
+}
+.container-ingreso a{
+    text-decoration: none;
 }
 .container-ingreso img{
     width: 140px;
